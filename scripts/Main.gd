@@ -22,6 +22,7 @@ var spawn_interval: float = 0.8
 var current_xp: int = 0
 var xp_to_level: int = 10
 var player_level: int = 1
+var enemies_killed: int = 0
 
 var _remaining_spawns: int = 0
 var _spawn_timer: Timer = null
@@ -118,6 +119,7 @@ func start_boss_phase() -> void:
 
 func on_boss_died(death_position: Vector2, xp_amount: int) -> void:
 	is_boss_phase = false
+	enemies_killed += 1
 	current_level += 1
 	current_wave = 0
 	enemies_alive = 0
@@ -141,6 +143,7 @@ func spawn_enemy() -> void:
 
 func on_enemy_died(death_position: Vector2, xp_amount: int) -> void:
 	enemies_alive = max(0, enemies_alive - 1)
+	enemies_killed += 1
 	hud.update_enemy_count(enemies_alive)
 	var orb: XPOrb = XP_ORB_SCENE.instantiate()
 	orb.setup(xp_amount, $Archer.xp_auto_collect_radius)
@@ -222,6 +225,10 @@ func on_debug_pressed() -> void:
 	hud.update_enemy_count(0)
 
 
+func calculate_score() -> int:
+	return (enemies_killed * 50) + (current_level * 500) + (current_wave * 100)
+
+
 func on_archer_died() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		enemy.queue_free()
@@ -231,7 +238,7 @@ func on_archer_died() -> void:
 		bomb.queue_free()
 	for orb in get_tree().get_nodes_in_group("orbs"):
 		orb.queue_free()
-	game_over_screen.show_screen(current_level, current_wave)
+	game_over_screen.show_screen(current_level, current_wave, calculate_score())
 
 
 func on_restart_pressed() -> void:

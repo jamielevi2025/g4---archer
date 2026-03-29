@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dawjvfd7gogtv"]
+
+[ext_resource type="Script" uid="uid://m2lv1d8nmsdv" path="res://scripts/Leaderboard.gd" id="1_leaderboard"]
+
+[node name="Leaderboard" type="Node2D" unique_id=200000001]
+script = ExtResource("1_leaderboard")
+
+[node name="Background" type="ColorRect" parent="." unique_id=200000002]
+offset_right = 540.0
+offset_bottom = 960.0
+color = Color(0.1, 0.15, 0.1, 1)
+
+[node name="TitleLabel" type="Label" parent="." unique_id=200000003]
+offset_top = 60.0
+offset_right = 540.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "LEADERBOARD"
+horizontal_alignment = 1
+
+[node name="ScoreList" type="VBoxContainer" parent="." unique_id=200000004]
+custom_minimum_size = Vector2(460, 600)
+offset_left = 40.0
+offset_top = 120.0
+offset_right = 500.0
+offset_bottom = 820.0
+theme_override_constants/separation = 8
+
+[node name="LoadingLabel" type="Label" parent="." unique_id=200000005]
+offset_top = 460.0
+offset_right = 540.0
+offset_bottom = 500.0
+theme_override_font_sizes/font_size = 16
+text = "Loading scores..."
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="." unique_id=200000006]
+custom_minimum_size = Vector2(160, 48)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 189.0
+offset_top = 605.0
+offset_right = 349.0
+offset_bottom = 653.0
+grow_horizontal = 2
+text = "Back"

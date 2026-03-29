@@ -14,6 +14,9 @@ func _ready() -> void:
 	play_button.pressed.connect(func():
 		get_tree().change_scene_to_file("res://scenes/Main.tscn")
 	)
+	$MenuContainer/LeaderboardButton.pressed.connect(func():
+		get_tree().change_scene_to_file("res://scenes/Leaderboard.tscn")
+	)
 	mode_bow.pressed.connect(func():
 		GameSettings.control_mode = "bow"
 		mode_desc_label.text = "Click, drag down and release to fire"
