@@ -1,86 +1,83 @@
-[gd_scene format=3 uid="uid://volcontrols1"]
+[gd_scene format=3 uid="uid://cpyk7s6i4yhy5"]
 
-[ext_resource type="Script" path="res://scripts/VolumeControls.gd" id="1_volctrl"]
+[ext_resource type="Script" uid="uid://cx4qdyhh7k8ii" path="res://scripts/VolumeControls.gd" id="1_volctrl"]
 
-[node name="VolumeControls" type="VBoxContainer"]
-script = ExtResource("1_volctrl")
+[node name="VolumeControls" type="VBoxContainer" unique_id=1490451433]
 theme_override_constants/separation = 8
+script = ExtResource("1_volctrl")
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=1256185932]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
 text = "Audio Settings"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 
-[node name="MasterRow" type="HBoxContainer" parent="."]
+[node name="MasterRow" type="HBoxContainer" parent="." unique_id=915508223]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="MasterLabel" type="Label" parent="MasterRow"]
-layout_mode = 2
+[node name="MasterLabel" type="Label" parent="MasterRow" unique_id=59213304]
 custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Master"
-theme_override_font_sizes/font_size = 12
 
-[node name="MasterSlider" type="HSlider" parent="MasterRow"]
-layout_mode = 2
+[node name="MasterSlider" type="HSlider" parent="MasterRow" unique_id=305351137]
 custom_minimum_size = Vector2(160, 20)
-min_value = 0.0
+layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="MasterValue" type="Label" parent="MasterRow"]
-layout_mode = 2
+[node name="MasterValue" type="Label" parent="MasterRow" unique_id=2108730383]
 custom_minimum_size = Vector2(40, 0)
-text = "100%"
+layout_mode = 2
 theme_override_font_sizes/font_size = 11
+text = "100%"
 
-[node name="MusicRow" type="HBoxContainer" parent="."]
+[node name="MusicRow" type="HBoxContainer" parent="." unique_id=2012542058]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="MusicLabel" type="Label" parent="MusicRow"]
-layout_mode = 2
+[node name="MusicLabel" type="Label" parent="MusicRow" unique_id=714345010]
 custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Music"
-theme_override_font_sizes/font_size = 12
 
-[node name="MusicSlider" type="HSlider" parent="MusicRow"]
-layout_mode = 2
+[node name="MusicSlider" type="HSlider" parent="MusicRow" unique_id=1549584719]
 custom_minimum_size = Vector2(160, 20)
-min_value = 0.0
+layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="MusicValue" type="Label" parent="MusicRow"]
-layout_mode = 2
+[node name="MusicValue" type="Label" parent="MusicRow" unique_id=473403691]
 custom_minimum_size = Vector2(40, 0)
-text = "100%"
+layout_mode = 2
 theme_override_font_sizes/font_size = 11
+text = "100%"
 
-[node name="SFXRow" type="HBoxContainer" parent="."]
+[node name="SFXRow" type="HBoxContainer" parent="." unique_id=345565517]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="SFXLabel" type="Label" parent="SFXRow"]
-layout_mode = 2
+[node name="SFXLabel" type="Label" parent="SFXRow" unique_id=1503649432]
 custom_minimum_size = Vector2(80, 0)
-text = "SFX"
-theme_override_font_sizes/font_size = 12
-
-[node name="SFXSlider" type="HSlider" parent="SFXRow"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "SFX"
+
+[node name="SFXSlider" type="HSlider" parent="SFXRow" unique_id=2863486]
 custom_minimum_size = Vector2(160, 20)
-min_value = 0.0
+layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="SFXValue" type="Label" parent="SFXRow"]
-layout_mode = 2
+[node name="SFXValue" type="Label" parent="SFXRow" unique_id=1691771777]
 custom_minimum_size = Vector2(40, 0)
-text = "100%"
+layout_mode = 2
 theme_override_font_sizes/font_size = 11
+text = "100%"
