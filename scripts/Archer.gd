@@ -5,6 +5,7 @@ class_name Archer
 signal hp_changed(current_hp: float, max_hp: float)
 signal died
 signal xp_gained(amount: int)
+signal raw_xp_gained(amount: int)
 
 @export var arrow_scene: PackedScene
 
@@ -270,7 +271,7 @@ func _spawn_arrow(dir: Vector2, power: float, damage_override: float = -1.0) -> 
 	if has_xp_shot:
 		arrow.has_xp_shot = true
 		arrow.xp_shot_amount = xp_shot_amount
-	arrow.xp_shot_hit.connect(func(amount: int): xp_gained.emit(amount))
+	arrow.xp_shot_hit.connect(func(amount: int): raw_xp_gained.emit(amount))
 	arrow.heal_requested.connect(func(amount: float): take_damage(-amount))
 	get_tree().root.add_child(arrow)
 

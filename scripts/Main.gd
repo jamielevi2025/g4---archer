@@ -38,6 +38,7 @@ func _ready() -> void:
 	$Archer.hp_changed.connect(hud.update_player_hp)
 	$Archer.died.connect(on_archer_died)
 	$Archer.xp_gained.connect(on_xp_collected)
+	$Archer.raw_xp_gained.connect(on_raw_xp_collected)
 	hud.menu_button_pressed.connect(func():
 		if upgrade_screen.visible or game_over_screen.visible:
 			return
@@ -250,6 +251,16 @@ func on_quit_pressed() -> void:
 func on_xp_collected(amount: int) -> void:
 	var actual: int = int(float(amount) * $Archer.xp_multiplier)
 	current_xp += actual
+	while current_xp >= xp_to_level:
+		current_xp -= xp_to_level
+		xp_to_level += 5
+		player_level += 1
+		show_upgrade_screen()
+	hud.update_xp(current_xp, xp_to_level, player_level)
+
+
+func on_raw_xp_collected(amount: int) -> void:
+	current_xp += amount
 	while current_xp >= xp_to_level:
 		current_xp -= xp_to_level
 		xp_to_level += 5

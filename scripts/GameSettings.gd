@@ -29,7 +29,19 @@ func load_settings() -> void:
 	apply_volumes()
 
 
+func ensure_buses() -> void:
+	if AudioServer.get_bus_index("Music") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music")
+		AudioServer.set_bus_send(AudioServer.bus_count - 1, "Master")
+	if AudioServer.get_bus_index("SFX") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.bus_count - 1, "SFX")
+		AudioServer.set_bus_send(AudioServer.bus_count - 1, "Master")
+
+
 func apply_volumes() -> void:
+	ensure_buses()
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(master_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(sfx_volume))
