@@ -7,12 +7,19 @@ signal died(death_position: Vector2, xp_value: int)
 @export var projectile_scene: PackedScene = null
 @export var bomb_scene: PackedScene = null
 
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+
 var max_hp: float = 200.0
 var current_hp: float = 200.0
 var move_speed: float = 60.0
 var xp_value: int = 50
 var is_dead: bool = false
 var has_arrived: bool = false
+var is_entering: bool = true
+var hurt_timer: float = 0.0
+var hurt_duration: float = 0.4
+var pre_hurt_animation: String = 'idle'
+var is_dying: bool = false
 var archer_ref: Node = null
 var current_level: int = 1
 
@@ -41,11 +48,18 @@ func _ready() -> void:
 	$HealthBarContainer/HealthBarFill.size.x = 100.0
 	direction_change_interval = randf_range(1.5, 3.5)
 	sine_offset = randf_range(0.0, TAU)
+	anim_sprite.play('idle')
 
 
 func _physics_process(delta: float) -> void:
+	if is_dying:
+		return
 	if is_dead:
 		return
+	if hurt_timer > 0:
+		hurt_timer -= delta
+		if hurt_timer <= 0 and anim_sprite.animation == 'hurt':
+			anim_sprite.play(pre_hurt_animation)
 	if not has_arrived:
 		velocity = Vector2(0, move_speed)
 		move_and_slide()
@@ -53,6 +67,7 @@ func _physics_process(delta: float) -> void:
 			position.y = _target_y
 			velocity = Vector2.ZERO
 			has_arrived = true
+			is_entering = false
 	else:
 		sine_offset += sine_speed * delta
 		direction_timer += delta
@@ -134,25 +149,39 @@ func fire_bomb() -> void:
 	bomb.bomb_destroyed.connect(on_bomb_resolved)
 	bomb.bomb_exploded.connect(on_bomb_resolved)
 	active_bombs += 1
-	get_tree().root.add_child(bomb)
+	get_tree().current_scene.add_child(bomb)
 
 
 func on_bomb_resolved() -> void:
 	active_bombs = max(0, active_bombs - 1)
 
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float) -> bool:
+	if is_entering:
+		return false
 	if is_dead:
-		return
+		return false
 	current_hp -= amount
 	$HealthBarContainer/HealthBarFill.size.x = (current_hp / max_hp) * 100.0
+	if anim_sprite.animation != 'hurt':
+		pre_hurt_animation = anim_sprite.animation
+	hurt_timer = hurt_duration
+	anim_sprite.play('hurt')
 	if current_hp <= 0:
 		die()
+	return true
 
 
 func die() -> void:
 	if is_dead:
 		return
 	is_dead = true
+	is_dying = true
+	velocity = Vector2.ZERO
+	$CollisionShape2D.set_deferred('disabled', true)
+	hurt_timer = 0.0
+	anim_sprite.modulate = Color(1, 1, 1)
+	anim_sprite.play('death')
+	await anim_sprite.animation_finished
 	died.emit(global_position, xp_value)
 	queue_free()

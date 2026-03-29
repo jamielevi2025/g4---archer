@@ -1,9 +1,103 @@
 [gd_scene format=3 uid="uid://bomb"]
 
 [ext_resource type="Script" uid="uid://cev0get1eti0s" path="res://scripts/Bomb.gd" id="1_bomb"]
+[ext_resource type="AudioStream" uid="uid://clkmyaarole1x" path="res://assets/audio/8-bit_explosion_11.mp3" id="2_3e7g0"]
+[ext_resource type="Texture2D" uid="uid://djcvb28e6jlt2" path="res://assets/sprites/BombSlime.png" id="3_bombslime"]
+[ext_resource type="Texture2D" uid="uid://c7xo7wgsrvckl" path="res://assets/sprites/Shadow.png" id="3_pmu6x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmu6x"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rrryy"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8o2f2"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iyllq"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snt3q"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2s5v"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8udp"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osdfa"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bomb_0"]
+atlas = ExtResource("3_bombslime")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bomb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmu6x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rrryy")
+}],
+"loop": true,
+"name": &"active",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8o2f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iyllq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_snt3q")
+}],
+"loop": false,
+"name": &"death",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2s5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8udp")
+}],
+"loop": true,
+"name": &"fast",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osdfa")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bomb_0")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 4.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 18.0
+radius = 20.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2"]
 radius = 140.0
@@ -11,19 +105,16 @@ radius = 140.0
 [node name="Bomb" type="Node2D" unique_id=200000001]
 script = ExtResource("1_bomb")
 
-[node name="Visual" type="ColorRect" parent="." unique_id=200000002]
-offset_left = -14.0
-offset_top = -14.0
-offset_right = 14.0
-offset_bottom = 14.0
-color = Color(0.9, 0.1, 0.1, 1)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1557955657]
+texture_filter = 1
+scale = Vector2(2.6249998, 2.625)
+sprite_frames = SubResource("SpriteFrames_bomb")
+animation = &"fast"
 
-[node name="WarningCircle" type="ColorRect" parent="." unique_id=200000003]
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-color = Color(1, 0.3019608, 0, 0.49803922)
+[node name="WarningCircle" type="Sprite2D" parent="." unique_id=307507079]
+position = Vector2(0, 3.9999998)
+scale = Vector2(2.75, 2.75)
+texture = ExtResource("3_pmu6x")
 
 [node name="ArrowDetector" type="Area2D" parent="." unique_id=200000008]
 collision_layer = 0
@@ -37,3 +128,6 @@ shape = SubResource("CircleShape2D_1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea" unique_id=200000007]
 shape = SubResource("CircleShape2D_2")
 disabled = true
+
+[node name="ExplosionSound" type="AudioStreamPlayer" parent="." unique_id=1191098200]
+stream = ExtResource("2_3e7g0")

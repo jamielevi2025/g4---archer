@@ -30,9 +30,10 @@ func show_screen(upgrades: Array, upgrade_levels_dict: Dictionary = {}) -> void:
 
 		vbox.get_node("TierLabel").text = u.tier.to_upper()
 		match u.tier:
-			"common": vbox.get_node("TierLabel").modulate = Color(0.7, 0.7, 0.7)
-			"rare":   vbox.get_node("TierLabel").modulate = Color(0.3, 0.5, 1.0)
-			"epic":   vbox.get_node("TierLabel").modulate = Color(0.7, 0.2, 1.0)
+			"common":    vbox.get_node("TierLabel").modulate = Color(0.7, 0.7, 0.7)
+			"rare":      vbox.get_node("TierLabel").modulate = Color(0.3, 0.5, 1.0)
+			"epic":      vbox.get_node("TierLabel").modulate = Color(0.7, 0.2, 1.0)
+			"legendary": vbox.get_node("TierLabel").modulate = Color(1.0, 0.75, 0.0)
 
 		vbox.get_node("NameLabel").text = u.name
 

@@ -38,6 +38,14 @@ func _ready() -> void:
 	$Archer.hp_changed.connect(hud.update_player_hp)
 	$Archer.died.connect(on_archer_died)
 	$Archer.xp_gained.connect(on_xp_collected)
+	hud.menu_button_pressed.connect(func():
+		if upgrade_screen.visible or game_over_screen.visible:
+			return
+		if pause_menu.visible:
+			pause_menu.hide_pause()
+		else:
+			pause_menu.show_pause()
+	)
 	game_over_screen = GAME_OVER_SCENE.instantiate()
 	add_child(game_over_screen)
 	game_over_screen.restart_pressed.connect(on_restart_pressed)
@@ -49,6 +57,7 @@ func _ready() -> void:
 	pause_menu = PAUSE_MENU_SCENE.instantiate()
 	add_child(pause_menu)
 	pause_menu.resume_pressed.connect(func(): pause_menu.hide_pause())
+	pause_menu.debug_pressed.connect(on_debug_pressed)
 	pause_menu.restart_pressed.connect(func():
 		Engine.time_scale = 1.0
 		get_tree().reload_current_scene()
@@ -111,7 +120,7 @@ func on_boss_died(death_position: Vector2, xp_amount: int) -> void:
 	current_wave = 0
 	enemies_alive = 0
 	var orb: XPOrb = XP_ORB_SCENE.instantiate()
-	orb.setup(xp_amount)
+	orb.setup(xp_amount, $Archer.xp_auto_collect_radius)
 	orb.position = death_position
 	orb.collected.connect(on_xp_collected)
 	add_child(orb)
@@ -132,7 +141,7 @@ func on_enemy_died(death_position: Vector2, xp_amount: int) -> void:
 	enemies_alive = max(0, enemies_alive - 1)
 	hud.update_enemy_count(enemies_alive)
 	var orb: XPOrb = XP_ORB_SCENE.instantiate()
-	orb.setup(xp_amount)
+	orb.setup(xp_amount, $Archer.xp_auto_collect_radius)
 	orb.position = death_position
 	orb.collected.connect(on_xp_collected)
 	add_child(orb)
@@ -201,6 +210,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		for boss in get_tree().get_nodes_in_group("bosses"):
 			boss.queue_free()
 		on_boss_died(Vector2(270, 160), 0)
+
+
+func on_debug_pressed() -> void:
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_method("die"):
+			enemy.die()
+	enemies_alive = 0
+	hud.update_enemy_count(0)
 
 
 func on_archer_died() -> void:

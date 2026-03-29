@@ -1,43 +1,129 @@
 [gd_scene format=3 uid="uid://boss"]
 
 [ext_resource type="Script" uid="uid://d6rg7f130qjw" path="res://scripts/Boss.gd" id="1_boss"]
+[ext_resource type="Texture2D" uid="uid://vbgrq1jfwh8m" path="res://assets/sprites/SlimeBoss.png" id="2_6ig5k"]
+[ext_resource type="Texture2D" uid="uid://cy5kr64xjrp5a" path="res://assets/sprites/HPBorder.png" id="2_gw42l"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 20.0
-height = 40.0
+radius = 47.0
+height = 94.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gw42l"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edv8j"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o02xv"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cs582"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfyq2"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85kei"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kitqk"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfnkn"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2r62o"]
+atlas = ExtResource("2_6ig5k")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ncbpu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gw42l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_edv8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o02xv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cs582")
+}],
+"loop": false,
+"name": &"death",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pfyq2")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85kei")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kitqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gfnkn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2r62o")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
 
 [node name="Boss" type="CharacterBody2D" unique_id=188670045]
 script = ExtResource("1_boss")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=218690834]
-position = Vector2(0, -20)
 shape = SubResource("CapsuleShape2D_1")
 
-[node name="Visual" type="ColorRect" parent="." unique_id=42151513]
-offset_left = -22.0
-offset_top = -50.0
-offset_right = 22.0
-color = Color(0.7, 0.1, 0.7, 1)
-
 [node name="HealthBarContainer" type="Node2D" parent="." unique_id=1511364764]
-position = Vector2(0, -50)
-
-[node name="HealthBarBG" type="ColorRect" parent="HealthBarContainer" unique_id=995159531]
-offset_left = -50.0
-offset_right = 50.0
-offset_bottom = 8.0
-color = Color(0.2, 0.2, 0.2, 1)
+position = Vector2(-1, -50)
 
 [node name="HealthBarFill" type="ColorRect" parent="HealthBarContainer" unique_id=1702485011]
-offset_left = -50.0
-offset_right = 50.0
-offset_bottom = 8.0
+offset_left = -44.0
+offset_top = -17.0
+offset_right = 43.0
+offset_bottom = -8.250008
 color = Color(0.8, 0.1, 0.1, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="HPBorder" type="Sprite2D" parent="HealthBarContainer" unique_id=1055220932]
+position = Vector2(-50, -25)
+scale = Vector2(3.4687495, 3.0000005)
+texture = ExtResource("2_gw42l")
+centered = false
 
 [node name="BossLabel" type="Label" parent="." unique_id=2054935892]
-offset_left = -20.0
-offset_top = -70.0
-offset_right = -20.0
+offset_left = -18.0
+offset_top = -90.0
+offset_right = 18.0
 offset_bottom = -70.0
 theme_override_font_sizes/font_size = 14
 text = "BOSS"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=472743906]
+position = Vector2(0, 9.536743e-07)
+scale = Vector2(3.5, 3.5)
+sprite_frames = SubResource("SpriteFrames_ncbpu")
+animation = &"idle"
+frame = 2
+frame_progress = 0.36633766

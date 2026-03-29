@@ -2,6 +2,8 @@ extends Node2D
 
 class_name Bomb
 
+const HitEffect = preload("res://scenes/HitEffect.tscn")
+
 signal bomb_destroyed
 signal bomb_exploded
 
@@ -9,13 +11,14 @@ var max_hp: float = 30.0
 var current_hp: float = 30.0
 var is_active: bool = false
 var is_exploding: bool = false
+var is_dying: bool = false
 var countdown_duration: float = 5.0
 var countdown_timer: float = 0.0
 var pre_blink_delay: float = 1.0
 var pre_blink_timer: float = 0.0
-var flash_interval: float = 0.5
-var flash_timer: float = 0.0
-var flash_visible: bool = true
+var hurt_timer: float = 0.0
+var hurt_duration: float = 0.3
+var pre_hurt_animation: String = "active"
 var damage: float = 35.0
 var landing_position: Vector2
 var start_position: Vector2
@@ -26,9 +29,13 @@ var max_ring_radius: float = 600.0
 var ring_expanding: bool = false
 var already_damaged: bool = false
 
+@onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+
 
 func _ready() -> void:
 	add_to_group("bombs")
+	anim_sprite.play("idle")
 
 
 func setup(land_pos: Vector2, from_pos: Vector2, hp: float) -> void:
@@ -36,18 +43,23 @@ func setup(land_pos: Vector2, from_pos: Vector2, hp: float) -> void:
 	start_position = from_pos
 	max_hp = hp
 	current_hp = hp
-	# WarningCircle centered offsets put it at its position in local space;
-	# since Bomb starts at (0,0), local == world
 	$WarningCircle.position = landing_position
-	$Visual.position = from_pos
 	is_active = false
 
 
 func _process(delta: float) -> void:
+	if is_dying:
+		return
+
+	if hurt_timer > 0:
+		hurt_timer -= delta
+		if hurt_timer <= 0:
+			anim_sprite.play(pre_hurt_animation)
+
 	if not is_active:
 		drop_timer += delta
 		var t: float = clampf(drop_timer / drop_duration, 0.0, 1.0)
-		$Visual.position = start_position.lerp(landing_position, t)
+		anim_sprite.position = start_position.lerp(landing_position, t)
 		if drop_timer >= drop_duration:
 			on_landed()
 		return
@@ -56,15 +68,9 @@ func _process(delta: float) -> void:
 		pre_blink_timer += delta
 		if pre_blink_timer >= pre_blink_delay:
 			countdown_timer += delta
-			if countdown_timer >= countdown_duration - 1.0:
-				flash_interval = 0.05
-			else:
-				flash_interval = lerpf(0.5, 0.1, countdown_timer / (countdown_duration - 1.0))
-			flash_timer += delta
-			if flash_timer >= flash_interval:
-				flash_timer = 0.0
-				flash_visible = not flash_visible
-				$Visual.modulate = Color(1, 1, 1, 1) if flash_visible else Color(0.9, 0.1, 0.1, 1)
+			if countdown_timer >= countdown_duration - 2.0 and anim_sprite.animation != "fast" and anim_sprite.animation != "hurt" and not is_dying:
+				pre_hurt_animation = "fast"
+				anim_sprite.play("fast")
 			if countdown_timer >= countdown_duration:
 				explode()
 
@@ -84,7 +90,8 @@ func on_landed() -> void:
 	is_active = true
 	$WarningCircle.hide()
 	position = landing_position
-	$Visual.position = Vector2.ZERO
+	anim_sprite.position = Vector2.ZERO
+	anim_sprite.play("active")
 	$ArrowDetector.area_entered.connect(on_arrow_hit)
 
 
@@ -102,14 +109,39 @@ func on_arrow_hit(body: Area2D) -> void:
 
 
 func take_damage(amount: float) -> void:
+	if is_dying:
+		return
 	current_hp -= amount
 	Arrow._spawn_damage_number(get_tree(), global_position, int(amount), Color(1.0, 0.5, 0.0))
+	var effect = HitEffect.instantiate()
+	effect.global_position = global_position
+	get_tree().root.add_child(effect)
+	if anim_sprite.animation != "hurt":
+		pre_hurt_animation = anim_sprite.animation
+	hurt_timer = hurt_duration
+	anim_sprite.play("hurt")
 	if current_hp <= 0:
-		bomb_destroyed.emit()
-		queue_free()
+		destroy_bomb()
+
+
+func destroy_bomb() -> void:
+	is_dying = true
+	$ArrowDetector.set_deferred("monitoring", false)
+	anim_sprite.play("death")
+	await anim_sprite.animation_finished
+	bomb_destroyed.emit()
+	queue_free()
 
 
 func explode() -> void:
+	if is_dying:
+		return
+	anim_sprite.visible = false
+	var sound = explosion_sound
+	remove_child(sound)
+	get_tree().root.add_child(sound)
+	sound.play()
+	sound.finished.connect(sound.queue_free)
 	is_exploding = true
 	ring_expanding = true
 	already_damaged = false
@@ -124,7 +156,7 @@ func explode() -> void:
 	ring_rect.offset_right = 10.0
 	ring_rect.offset_bottom = 10.0
 	ring_node.add_child(ring_rect)
-	get_tree().root.add_child(ring_node)
+	get_tree().current_scene.add_child(ring_node)
 
 	var expand_tween: Tween = ring_node.create_tween()
 	expand_tween.tween_property(ring_rect, "offset_left", -max_ring_radius * 2.0, 0.5)
@@ -135,5 +167,3 @@ func explode() -> void:
 	var fade_tween: Tween = ring_node.create_tween()
 	fade_tween.tween_property(ring_rect, "modulate:a", 0.0, 0.5)
 	fade_tween.tween_callback(ring_node.queue_free)
-
-	$Visual.hide()

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cx83jtobawd86" path="res://scripts/HitEffect.gd" id="1_hiteffect"]
 [ext_resource type="Texture2D" uid="uid://cyi3qic53npiy" path="res://assets/sprites/HitEffect2.png" id="2_df7el"]
+[ext_resource type="AudioStream" uid="uid://b8bvdo10i2oeo" path="res://assets/audio/8-bit_explosion_10.mp3" id="3_761mu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_761mu"]
 atlas = ExtResource("2_df7el")
@@ -38,3 +39,8 @@ script = ExtResource("1_hiteffect")
 [node name="Visual" type="AnimatedSprite2D" parent="." unique_id=655879821]
 scale = Vector2(2.125, 2.125)
 sprite_frames = SubResource("SpriteFrames_cm0cd")
+animation = &"hit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1476178683]
+stream = ExtResource("3_761mu")
+autoplay = true

@@ -2,12 +2,19 @@ extends CanvasLayer
 
 class_name HUD
 
+signal menu_button_pressed
+
 @onready var wave_label: Label = $WaveInfoContainer/WaveLabel
 @onready var level_label: Label = $WaveInfoContainer/LevelLabel
 @onready var enemy_count_label: Label = $EnemyInfoContainer/EnemyCountLabel
 @onready var player_health_fill: ColorRect = $PlayerHealthFill
 @onready var xp_bar_fill: ColorRect = $XPBarFill
 @onready var player_level_label: Label = $PlayerLevelLabel
+@onready var menu_button: Button = $MenuButton
+
+
+func _ready() -> void:
+	menu_button.pressed.connect(func(): menu_button_pressed.emit())
 
 
 func update_wave(wave: int, level: int) -> void:

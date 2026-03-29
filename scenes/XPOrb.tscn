@@ -1,19 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://xporb"]
+[gd_scene format=3 uid="uid://xporb"]
 
-[ext_resource type="Script" path="res://scripts/XPOrb.gd" id="1_xporb"]
+[ext_resource type="Script" uid="uid://bsm1ro04d1607" path="res://scripts/XPOrb.gd" id="1_xporb"]
+[ext_resource type="AudioStream" uid="uid://bfbhqlhnhjejn" path="res://assets/audio/8-bit_retro-coin_4.mp3" id="2_coinsound"]
+[ext_resource type="Texture2D" uid="uid://dbxrp3e7ook34" path="res://assets/sprites/XPOrb.png" id="3_0k1yy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 18.0
 
-[node name="XPOrb" type="Area2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_43vai"]
+atlas = ExtResource("3_0k1yy")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xjdj"]
+atlas = ExtResource("3_0k1yy")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nijym"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43vai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xjdj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="XPOrb" type="Area2D" unique_id=600192644]
 script = ExtResource("1_xporb")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=895923038]
 shape = SubResource("CircleShape2D_1")
 
-[node name="Visual" type="ColorRect" parent="."]
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 7.0
-color = Color(0.4, 0.9, 1.0, 1.0)
+[node name="CollectSound" type="AudioStreamPlayer" parent="." unique_id=1124544664]
+stream = ExtResource("2_coinsound")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=67465087]
+sprite_frames = SubResource("SpriteFrames_nijym")
+autoplay = "default"
+frame_progress = 0.56251115

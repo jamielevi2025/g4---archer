@@ -1,46 +1,56 @@
 [gd_scene format=3 uid="uid://pausemenu"]
 
-[ext_resource type="Script" path="res://scripts/PauseMenu.gd" id="1_pausemenu"]
+[ext_resource type="Script" uid="uid://re75htwstjiw" path="res://scripts/PauseMenu.gd" id="1_pausemenu"]
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=705514905]
 visible = false
 script = ExtResource("1_pausemenu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=888188747]
 offset_right = 540.0
 offset_bottom = 960.0
-color = Color(0.0, 0.0, 0.0, 0.6)
+color = Color(0, 0, 0, 0.6)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1004662900]
+anchors_preset = 8
 anchor_left = 0.5
-anchor_right = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
-offset_right = 100.0
 offset_top = -140.0
+offset_right = 100.0
 offset_bottom = 140.0
-alignment = 1
 theme_override_constants/separation = 16
+alignment = 1
 
-[node name="PausedLabel" type="Label" parent="VBoxContainer"]
+[node name="PausedLabel" type="Label" parent="VBoxContainer" unique_id=1105137843]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
 text = "PAUSED"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 32
-theme_override_colors/font_color = Color(1.0, 1.0, 1.0, 1.0)
 
-[node name="ResumeButton" type="Button" parent="VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="VBoxContainer" unique_id=587301630]
+custom_minimum_size = Vector2(180, 48)
 layout_mode = 2
-custom_minimum_size = Vector2(180.0, 48.0)
 text = "Resume"
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
+[node name="RestartButton" type="Button" parent="VBoxContainer" unique_id=40305549]
+custom_minimum_size = Vector2(180, 48)
 layout_mode = 2
-custom_minimum_size = Vector2(180.0, 48.0)
 text = "Restart Run"
 
-[node name="MenuButton" type="Button" parent="VBoxContainer"]
+[node name="MenuButton" type="Button" parent="VBoxContainer" unique_id=1436938926]
+custom_minimum_size = Vector2(180, 48)
 layout_mode = 2
-custom_minimum_size = Vector2(180.0, 48.0)
 text = "Main Menu"
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=952039340]
+layout_mode = 2
+
+[node name="DebugButton" type="Button" parent="VBoxContainer" unique_id=606404553]
+modulate = Color(1, 0.8, 0.3, 1)
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "Stuck? Click here"

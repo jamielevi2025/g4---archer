@@ -15,4 +15,4 @@ func _ready() -> void:
 
 func show_screen(level: int, wave: int) -> void:
 	visible = true
-	$VBoxContainer/StatsLabel.text = "You reached Level " + str(level) + " - Wave " + str(wave)
+	$VBoxContainer/StatsLabel.text = "gg you suck"

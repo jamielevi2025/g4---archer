@@ -12,16 +12,22 @@ var xp_value: int = 5
 var danger_line_y: float = 700.0
 var archer_position: Vector2 = Vector2(270, 860)
 var is_dead: bool = false
+var is_dying: bool = false
 var spawn_protection: bool = true
+var hurt_timer: float = 0.0
+var hurt_duration: float = 1.0
 var _is_poisoned: bool = false
 var _poison_tick_timer: Timer = null
 
 @onready var health_bar_fill: ColorRect = $HealthBarContainer/HealthBarFill
-@onready var visual: ColorRect = $Visual
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var freeze_indicator = $FreezeIndicator
 
 
 func _ready() -> void:
 	add_to_group("enemies")
+	anim_sprite.modulate = Color(1, 1, 1)
+	anim_sprite.play("default")
 	var protection_timer: Timer = Timer.new()
 	protection_timer.wait_time = 0.1
 	protection_timer.one_shot = true
@@ -30,7 +36,13 @@ func _ready() -> void:
 	protection_timer.start()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if is_dying:
+		return
+	if hurt_timer > 0:
+		hurt_timer -= delta
+		if hurt_timer <= 0:
+			anim_sprite.play("default")
 	if position.y < danger_line_y:
 		velocity = Vector2(0, move_speed)
 	else:
@@ -62,16 +74,22 @@ func take_damage(amount: float) -> void:
 	if is_dead:
 		return
 	current_hp -= amount
+	health_bar_fill.size.x = (current_hp / max_hp) * 40.0
 	if current_hp <= 0:
 		die()
+		return
+	hurt_timer = hurt_duration
+	anim_sprite.play("hurt")
 
 
 func apply_slow(factor: float, duration: float) -> void:
 	var original_speed: float = move_speed
 	move_speed *= (1.0 - factor)
+	freeze_indicator.visible = true
 	get_tree().create_timer(duration).timeout.connect(func():
 		if is_instance_valid(self) and not is_dead:
 			move_speed = original_speed
+			freeze_indicator.visible = false
 	)
 
 
@@ -82,7 +100,7 @@ func apply_poison(damage_per_sec: float, duration: float) -> void:
 		_poison_tick_timer.queue_free()
 		_poison_tick_timer = null
 	_is_poisoned = true
-	visual.color = Color(0.4, 0.9, 0.2)
+	anim_sprite.modulate = Color(0.4, 0.9, 0.2)
 	var ticks_remaining: Array[int] = [int(duration / 0.5)]
 	var tick_timer: Timer = Timer.new()
 	tick_timer.wait_time = 0.5
@@ -101,7 +119,7 @@ func apply_poison(damage_per_sec: float, duration: float) -> void:
 			_poison_tick_timer = null
 			_is_poisoned = false
 			if not is_dead:
-				visual.color = Color(0.8, 0.2, 0.2)
+				anim_sprite.modulate = Color(1, 1, 1)
 	)
 	tick_timer.start()
 
@@ -110,5 +128,11 @@ func die() -> void:
 	if is_dead:
 		return
 	is_dead = true
+	is_dying = true
+	velocity = Vector2.ZERO
+	$CollisionShape2D.set_deferred("disabled", true)
+	anim_sprite.modulate = Color(1, 1, 1)
+	anim_sprite.play("death")
+	await anim_sprite.animation_finished
 	died.emit(global_position, xp_value)
 	queue_free()

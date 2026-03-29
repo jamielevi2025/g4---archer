@@ -96,7 +96,8 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	var hp_before: float = body.current_hp if "current_hp" in body else 0.0
 	var is_lethal: bool = (hp_before - damage) <= 0
 
-	body.take_damage(damage)
+	var _result = body.take_damage(damage)
+	var damage_applied: bool = _result == null or _result == true
 
 	if has_poison and body.has_method("apply_poison"):
 		body.apply_poison(poison_dps, poison_duration)
@@ -128,8 +129,9 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	if has_xp_shot and xp_shot_amount > 0:
 		xp_shot_hit.emit(xp_shot_amount)
 
-	_spawn_damage_number(get_tree(), body.global_position, int(damage), Color(1.0, 1.0, 1.0))
-	spawn_hit_effect(body.global_position)
+	if damage_applied:
+		_spawn_damage_number(get_tree(), body.global_position, int(damage), Color(1.0, 1.0, 1.0))
+		spawn_hit_effect(body.global_position)
 
 	if is_explosive:
 		explode()
@@ -187,20 +189,23 @@ static func _do_explosion(tree: SceneTree, pos: Vector2, dmg: float, radius: flo
 
 
 static func _spawn_explosion_visual(tree: SceneTree, pos: Vector2, radius: float) -> void:
-	var container: Node2D = Node2D.new()
-	container.position = pos
-	container.scale = Vector2(0.1, 0.1)
-	var rect: ColorRect = ColorRect.new()
-	var size: float = radius * 2.0
-	rect.size = Vector2(size, size)
-	rect.position = Vector2(-radius, -radius)
-	rect.color = Color(1.0, 0.5, 0.0, 0.5)
-	container.add_child(rect)
-	tree.root.add_child(container)
-	var tween: Tween = container.create_tween()
-	tween.tween_property(container, "scale", Vector2(1.0, 1.0), 0.2)
-	tween.parallel().tween_property(container, "modulate:a", 0.0, 0.2)
-	tween.tween_callback(container.queue_free)
+	var ring_node := Node2D.new()
+	ring_node.global_position = pos
+	var ring_rect := ColorRect.new()
+	ring_rect.color = Color(1.0, 0.4, 0.0, 0.5)
+	var initial_size := 20.0
+	ring_rect.size = Vector2(initial_size, initial_size)
+	ring_rect.pivot_offset = Vector2(initial_size / 2.0, initial_size / 2.0)
+	ring_rect.position = -Vector2(initial_size / 2.0, initial_size / 2.0)
+	ring_node.add_child(ring_rect)
+	tree.current_scene.add_child(ring_node)
+	var expand_tween := ring_node.create_tween()
+	expand_tween.tween_property(ring_rect, "size", Vector2(radius * 2.0, radius * 2.0), 0.3)
+	expand_tween.parallel().tween_property(ring_rect, "pivot_offset", Vector2(radius, radius), 0.3)
+	expand_tween.parallel().tween_property(ring_rect, "position", -Vector2(radius, radius), 0.3)
+	var fade_tween := ring_node.create_tween()
+	fade_tween.tween_property(ring_rect, "modulate:a", 0.0, 0.3)
+	fade_tween.tween_callback(ring_node.queue_free)
 
 
 static func _spawn_damage_number(tree: SceneTree, pos: Vector2, amount: int, color: Color) -> void:

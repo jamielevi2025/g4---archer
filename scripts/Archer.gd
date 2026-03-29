@@ -77,6 +77,8 @@ var upgrade_levels: Dictionary = {}
 @onready var trajectory_line: Line2D = $TrajectoryLine
 @onready var health_bar_fill: ColorRect = $HealthBarContainer/HealthBarFill
 @onready var bow_sprite: AnimatedSprite2D = $BowSprite
+@onready var bow_sound: AudioStreamPlayer = $BowSound
+@onready var hurt_sound: AudioStreamPlayer = $HurtSound
 
 var current_bow_state: String = "idle"
 var locked_aim_angle: float = 0.0
@@ -218,6 +220,7 @@ func _fire_auto_aim() -> void:
 
 
 func _fire_in_direction(main_dir: Vector2, power: float) -> void:
+	bow_sound.play()
 	_spawn_arrow(main_dir, power)
 	if has_multi_shot and multi_shot_count > 0:
 		var extra_dmg: float = base_damage * damage_multiplier * multi_shot_damage
@@ -283,6 +286,7 @@ func take_damage(amount: float) -> void:
 		return
 	current_hp -= amount
 	invincibility_frames = invincibility_duration
+	hurt_sound.play()
 	hp_changed.emit(current_hp, max_hp)
 	if current_hp <= 0:
 		is_dead = true
@@ -301,11 +305,11 @@ func apply_upgrade(upgrade_id: String) -> void:
 		"xp_surge":
 			xp_multiplier += 0.25
 		"rapid_fire":
-			fire_rate_multiplier = max(0.2, fire_rate_multiplier * 0.85)
+			fire_rate_multiplier = max(0.2, fire_rate_multiplier * 0.90)
 		"emergency_rations":
 			current_hp = min(current_hp + 40.0, max_hp)
 			hp_changed.emit(current_hp, max_hp)
-		"sniper_shot":
+		"heavy_shot":
 			has_sniper = true
 			damage_multiplier = 1.0 + (level * 0.2) + (level * 0.02 * level)
 			fire_rate_multiplier *= 1.05
@@ -322,7 +326,7 @@ func apply_upgrade(upgrade_id: String) -> void:
 			leech_hit_hp  = hit_hp_table[mini(level, 10)]
 			if level >= 10:
 				max_hp += 20.0
-		"slow_touch":
+		"freezing_shot":
 			has_slow = true
 			var factor_table: Array = [0.0, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]
 			var dur_table: Array    = [0.0,  1.5,  2.0,  2.0,  2.5,  3.0,  3.0,  3.0,  3.5,  3.5,  4.0]
@@ -368,7 +372,7 @@ func apply_upgrade(upgrade_id: String) -> void:
 			multi_shot_spread = 12.0 + (level * 3.0)
 		"explosive_tip":
 			has_explosive = true
-			explosive_radius = 40.0 + (level * 8.0)
+			explosive_radius = 70.0 + (level * 8.0)
 			var ratio_table: Array = [0.0, 0.30, 0.40, 0.50, 0.60, 0.75, 0.90, 1.0, 1.0, 1.0, 1.0]
 			explosive_damage_ratio = ratio_table[mini(level, 10)]
 			explosive_secondary    = level >= 8

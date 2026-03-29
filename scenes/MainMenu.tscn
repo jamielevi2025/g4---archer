@@ -1,104 +1,111 @@
 [gd_scene format=3 uid="uid://mainmenu"]
 
-[ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Script" uid="uid://di6vnartiu53p" path="res://scripts/MainMenu.gd" id="1_mainmenu"]
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Node2D" unique_id=744187360]
 script = ExtResource("1_mainmenu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=996462022]
 offset_right = 540.0
 offset_bottom = 960.0
-color = Color(0.1, 0.15, 0.1, 1.0)
+color = Color(0.1, 0.15, 0.1, 1)
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=2045941463]
 offset_left = 70.0
 offset_top = 150.0
 offset_right = 470.0
 offset_bottom = 215.0
-text = "ARCHER"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
 theme_override_font_sizes/font_size = 48
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1.0)
-
-[node name="SubtitleLabel" type="Label" parent="."]
-offset_left = 120.0
-offset_top = 220.0
-offset_right = 420.0
-offset_bottom = 256.0
-text = "Last Stand"
+text = "game 1"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1.0)
 
-[node name="MenuContainer" type="VBoxContainer" parent="."]
+[node name="SubtitleLabel" type="Label" parent="." unique_id=862016359]
+offset_left = 120.0
+offset_top = 215.0
+offset_right = 420.0
+offset_bottom = 251.0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 24
+text = "pew pew"
+horizontal_alignment = 1
+
+[node name="SubsubtitleLabel" type="Label" parent="." unique_id=909645589]
+offset_top = 921.0
+offset_right = 538.0
+offset_bottom = 957.0
+theme_override_colors/font_color = Color(0.43856144, 0.7263196, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "vibe-coded by levi"
+horizontal_alignment = 1
+
+[node name="MenuContainer" type="VBoxContainer" parent="." unique_id=1194082579]
 offset_left = 110.0
 offset_top = 460.0
 offset_right = 430.0
 offset_bottom = 700.0
 theme_override_constants/separation = 16
 
-[node name="PlayButton" type="Button" parent="MenuContainer"]
+[node name="PlayButton" type="Button" parent="MenuContainer" unique_id=1528597380]
+custom_minimum_size = Vector2(200, 52)
 layout_mode = 2
-custom_minimum_size = Vector2(200.0, 52.0)
 text = "Play"
 
-[node name="ControlModeLabel" type="Label" parent="MenuContainer"]
+[node name="ControlModeLabel" type="Label" parent="MenuContainer" unique_id=764520888]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 14
 text = "Control Mode"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
 
-[node name="ModeButtons" type="HBoxContainer" parent="MenuContainer"]
+[node name="ModeButtons" type="HBoxContainer" parent="MenuContainer" unique_id=1825386087]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 20
+alignment = 1
 
-[node name="PointClickContainer" type="VBoxContainer" parent="MenuContainer/ModeButtons"]
+[node name="PointClickContainer" type="VBoxContainer" parent="MenuContainer/ModeButtons" unique_id=1285477899]
 layout_mode = 2
 
-[node name="ModePointClick" type="Button" parent="MenuContainer/ModeButtons/PointClickContainer"]
+[node name="ModePointClick" type="Button" parent="MenuContainer/ModeButtons/PointClickContainer" unique_id=1352466292]
+custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
-custom_minimum_size = Vector2(140.0, 44.0)
 text = "Point & Click"
 
-[node name="RecommendedLabel" type="Label" parent="MenuContainer/ModeButtons/PointClickContainer"]
+[node name="RecommendedLabel" type="Label" parent="MenuContainer/ModeButtons/PointClickContainer" unique_id=2086602102]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0, 1)
+theme_override_font_sizes/font_size = 10
 text = "Recommended"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 10
-theme_override_colors/font_color = Color(1.0, 0.85, 0.0, 1.0)
-theme_override_font_styles/font_style = 1
 
-[node name="DragAimContainer" type="VBoxContainer" parent="MenuContainer/ModeButtons"]
+[node name="DragAimContainer" type="VBoxContainer" parent="MenuContainer/ModeButtons" unique_id=848443848]
 layout_mode = 2
 
-[node name="ModeBow" type="Button" parent="MenuContainer/ModeButtons/DragAimContainer"]
+[node name="ModeBow" type="Button" parent="MenuContainer/ModeButtons/DragAimContainer" unique_id=1137077143]
+custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
-custom_minimum_size = Vector2(140.0, 44.0)
 text = "Drag & Aim"
 
-[node name="SpacerLabel" type="Label" parent="MenuContainer/ModeButtons/DragAimContainer"]
+[node name="SpacerLabel" type="Label" parent="MenuContainer/ModeButtons/DragAimContainer" unique_id=1094962278]
 layout_mode = 2
-text = ""
 theme_override_font_sizes/font_size = 10
 
-[node name="ModeDescLabel" type="Label" parent="."]
+[node name="ModeDescLabel" type="Label" parent="." unique_id=1723434328]
 offset_left = 70.0
 offset_top = 705.0
 offset_right = 470.0
 offset_bottom = 745.0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 13
 text = "Tap anywhere to fire toward your cursor"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1.0)
 
-[node name="HowToLabel" type="Label" parent="."]
+[node name="HowToLabel" type="Label" parent="." unique_id=997420441]
 offset_left = 70.0
 offset_top = 845.0
 offset_right = 470.0
 offset_bottom = 875.0
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 11
 text = "Survive as long as you can"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1.0)
