@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://mainmenu"]
 
 [ext_resource type="Script" uid="uid://di6vnartiu53p" path="res://scripts/MainMenu.gd" id="1_mainmenu"]
-[ext_resource type="PackedScene" path="res://scenes/VolumeControls.tscn" id="2_volctrl"]
+[ext_resource type="PackedScene" uid="uid://cpyk7s6i4yhy5" path="res://scenes/VolumeControls.tscn" id="2_volctrl"]
 
 [node name="MainMenu" type="Node2D" unique_id=744187360]
 script = ExtResource("1_mainmenu")
@@ -56,7 +56,7 @@ offset_right = 538.0
 offset_bottom = 945.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 8
-text = "v0.2.2 - Peter Update"
+text = "v0.2.3 - Peter Update"
 horizontal_alignment = 1
 
 [node name="MenuContainer" type="VBoxContainer" parent="." unique_id=1194082579]
